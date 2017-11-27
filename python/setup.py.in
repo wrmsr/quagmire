@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+import distutils.sysconfig
+import setuptools.command.install
+import shutil
+
+
+class CompiledLibInstall(setuptools.command.install.install):
+
+    def run(self):
+        filenames = '${PYTHON_INSTALL_FILES}'.split(';')
+        install_dir = distutils.sysconfig.get_python_lib()
+        [shutil.copy(filename, install_dir) for filename in filenames]
+
+
+if __name__ == '__main__':
+    setuptools.setup(
+        name='quagmire',
+        version='0.0.1-dev',
+        packages=['quagmire'],
+        license='Apache License 2.0',
+        author='wrmsr',
+        cmdclass={'install': CompiledLibInstall}
+    )
